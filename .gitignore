@@ -1,0 +1,5 @@
+# Dependency directories
+node_modules/
+ios/Pods/
+ios/Plugin.xcworkspace/contents.xcworkspacedata
+ios/Plugin.xcworkspace/xcuserdata/
