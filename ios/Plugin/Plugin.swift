@@ -4,8 +4,14 @@ import Capacitor
 /**
  * Notificaton types for NSNotificationCenter
  */
-public enum BackgroundNotifications: String {
-  case FetchReceived = "CAPBackgroundFetchReceived"
+@objc public enum BackgroundNotifications: Int {
+  case FetchReceived
+  
+  public func name() -> String {
+    switch self {
+    case .FetchReceived: return "CAPBackgroundFetchReceived"
+    }
+  }
 }
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -20,7 +26,7 @@ public class BackgroundFetch: CAPPlugin {
     super.init(bridge: bridge, pluginId: pluginId, pluginName: pluginName)
     print("BackgroundFetch initialized")
     
-    NotificationCenter.default.addObserver(self, selector: #selector(self.performFetchWithcompletionHandler(notification:)), name: NSNotification.Name(BackgroundNotifications.FetchReceived.rawValue), object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(self.performFetchWithcompletionHandler(notification:)), name: NSNotification.Name(BackgroundNotifications.FetchReceived.name()), object: nil)
   }
   
   @objc func setMinimumBackgroundFetchInterval(_ call: CAPPluginCall) {
