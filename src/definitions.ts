@@ -4,16 +4,9 @@ declare global {
   }
 }
 
-export enum FetchResult {
-  newData = "newData",
-  noData = "noData",
-  failed = "failed"
-}
+type FetchResult = "newData" | "noData" | "failed";
 
-export enum FetchInterval {
-  minimum = "minimum",
-  never = "never"
-}
+type FetchInterval = "minimum" | "never";
 
 export const FetchReceived = "BACKGROUNDFETCHRECEIVED";
 
