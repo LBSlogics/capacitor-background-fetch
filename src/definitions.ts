@@ -1,4 +1,5 @@
 import { Plugin } from "@capacitor/core/dist/esm/definitions.d";
+
 declare global {
   interface PluginRegistry {
     BackgroundFetch?: BackgroundFetchPlugin;

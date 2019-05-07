@@ -25,22 +25,11 @@ public class BackgroundFetch: CAPPlugin {
   public override init!(bridge: CAPBridge!, pluginId: String!, pluginName: String!) {
     super.init(bridge: bridge, pluginId: pluginId, pluginName: pluginName)
     print("BackgroundFetch initialized")
-    NotificationCenter.default.addObserver(self, selector: #selector(self.testnotification(notification:)), name: NSNotification.Name(BackgroundNotifications.FetchReceived.name()), object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(self.performFetchWithcompletionHandler(notification:)), name: NSNotification.Name(BackgroundNotifications.FetchReceived.name()), object: nil)
   }
   
-  @objc func testnotification(notification: Notification) {
-    print("AppDelegateBackgroundFetch: Try notification");
-    guard let completionHandler = notification.object as? (UIBackgroundFetchResult) -> Void else {
-      print("AppDelegateBackgroundFetch: Error getting completion handler")
-      return
-    }
-    completionHandler(.noData)
-    print("AppDelegateBackgroundFetch: completion handler executed")
-  }
-  
   @objc func performFetchWithcompletionHandler(notification: Notification) {
-    print("BackgroundFetch: Try notification");
+    print("BackgroundFetch: Notification Received");
     guard let completionHandler = notification.object as? (UIBackgroundFetchResult) -> Void else {
       print("BackgroundFetch: Error getting completion handler")
       return
@@ -66,8 +55,7 @@ public class BackgroundFetch: CAPPlugin {
       UIApplication.shared.setMinimumBackgroundFetchInterval(timeInterval)
     }
     
-    NotificationCenter.default.addObserver(self, selector: #selector(self.performFetchWithcompletionHandler(notification:)), name: NSNotification.Name(BackgroundNotifications.FetchReceived.name()), object: nil)
-    print("BackgroundFetch: SetMinimumInterval and registered Notification Observer")
+    print("BackgroundFetch: SetMinimumInterval")
     call.success([:])
   }
   
@@ -81,7 +69,7 @@ public class BackgroundFetch: CAPPlugin {
   
   @objc func fetchCompleted(_ call: CAPPluginCall) {
     guard let completionHandler = self.completionHandler else {
-      let message = "Background Fetch: No completion handler stored"
+      let message = "BackgroundFetch: No fetch command received from iOS"
       print(message)
       call.error(message)
       return
@@ -99,6 +87,8 @@ public class BackgroundFetch: CAPPlugin {
     }
     
     completionHandler(fetchResult)
+    print("BackgroundFetch: Called completion handler");
+    self.completionHandler = nil
     call.success([:])
   }
 }
