@@ -3,17 +3,10 @@ declare global {
         BackgroundFetch?: BackgroundFetchPlugin;
     }
 }
-export declare enum FetchResult {
-    newData = "newData",
-    noData = "noData",
-    failed = "failed"
-}
-export declare enum FetchInterval {
-    minimum = "minimum",
-    never = "never"
-}
+declare type FetchResult = "newData" | "noData" | "failed";
+declare type FetchInterval = "minimum" | "never";
 export declare const FetchReceived = "BACKGROUNDFETCHRECEIVED";
-export interface BackgroundFetchPlugin {
+export interface BackgroundFetchPlugin extends Plugin {
     setMinimumBackgroundFetchInterval(options: {
         interval: FetchInterval;
         seconds: number;
@@ -23,3 +16,4 @@ export interface BackgroundFetchPlugin {
         result: FetchResult;
     }): Promise<void>;
 }
+export {};

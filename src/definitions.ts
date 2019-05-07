@@ -10,7 +10,7 @@ type FetchInterval = "minimum" | "never";
 
 export const FetchReceived = "BACKGROUNDFETCHRECEIVED";
 
-export interface BackgroundFetchPlugin {
+export interface BackgroundFetchPlugin extends Plugin {
   setMinimumBackgroundFetchInterval(options: {
     interval: FetchInterval;
     seconds: number;
