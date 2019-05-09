@@ -146,9 +146,9 @@ fetchCompleted(options: { result: FetchResult }): Promise<void>;
 
 **returns**: `Promise<void>`
 
-#### Plugin events
+### Plugin events
 
-##### FetchReceived
+#### FetchReceived
 
 **String representation**: BACKGROUNDFETCHRECEIVED
 
