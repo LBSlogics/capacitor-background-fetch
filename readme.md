@@ -97,7 +97,7 @@ BackgroundFetch.setMinimumBackgroundFetchInterval({
 
 ## API
 
-#### setMinimumBackgroundFetchInterval
+### setMinimumBackgroundFetchInterval
 
 Sets the minimum background fetch interval but does not garantee that iOS will give you a fetch event after this interval. iOS does decide on its own, based on the users application usage, whenever it is best for your application to receive a fetch.
 
@@ -115,7 +115,7 @@ setMinimumBackgroundFetchInterval(options: {
 
 **returns**: `Promise<void>`
 
-#### disableBackgroundFetch
+####disableBackgroundFetch
 
 Disables background fetch if it is not used anymore. Same as calling `setMinimumBackgroundFetchInterval` with an interval of `never`.
 
@@ -126,7 +126,7 @@ disableBackgroundFetch(options: {}): Promise<void>;
 **options**: none
 **returns**: `Promise<void>`
 
-#### fetchCompleted
+### fetchCompleted
 
 Tells iOS that the fetch has completed and what was the outcome of the fetch.
 This function needs to be called within approximatly 30 seconds after the fetch event was received otherwise iOS will kill your application.
@@ -148,7 +148,7 @@ fetchCompleted(options: { result: FetchResult }): Promise<void>;
 
 ### Plugin events
 
-#### FetchReceived
+### FetchReceived
 
 **String representation**: BACKGROUNDFETCHRECEIVED
 
