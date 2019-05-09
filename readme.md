@@ -151,7 +151,9 @@ fetchCompleted(options: { result: FetchResult }): Promise<void>;
 ##### FetchReceived
 
 **String representation**: BACKGROUNDFETCHRECEIVED
+
 **Data**: None
+
 **Triggered**: When a Background Fetch was initiated by the AppDelegate
 
 [capabilities]: https://github.com/kaunstdadenga/capacitor-background-fetch/blob/master/doc/img/capabilities.png "Xcode Capabilities Settings"
