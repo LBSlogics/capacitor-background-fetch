@@ -23,8 +23,8 @@ Background Fetch was introduced in iOS version `7`, so be sure to target devices
 ##### Capabilities
 
 - Go to the `Application Settings` > `Capabilities`
-  -- Activate `Background Modes`
-  -- Tick `Background fetch`
+  - Activate `Background Modes`
+  - Tick `Background fetch`
 
 ![alt text][capabilities]
 
@@ -140,9 +140,9 @@ fetchCompleted(options: { result: FetchResult }): Promise<void>;
 **options**:
 
 - `result: FetchResult`:
-  -- `newData`: to indicate the fetch was successful and new data could be loaded
-  -- `noData`: to indicate that no data could be loaded
-  -- `failed`: to indicate that the fetch was failed
+  - `newData`: to indicate the fetch was successful and new data could be loaded
+  - `noData`: to indicate that no data could be loaded
+  - `failed`: to indicate that the fetch was failed
 
 **returns**: `Promise<void>`
 
