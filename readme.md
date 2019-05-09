@@ -1,6 +1,7 @@
 # Capacitor Background Fetch
 
 [![npm](https://img.shields.io/npm/v/capacitor-background-fetch.svg)](https://www.npmjs.com/package/capacitor-background-fetch)
+
 iOS Background Fetch Plugin to be used with Ionic/Capacitor.
 
 ## Supported Platforms
@@ -24,7 +25,8 @@ Background Fetch was introduced in iOS version `7`, so be sure to target devices
 - Go to the `Application Settings` > `Capabilities`
   -- Activate `Background Modes`
   -- Tick `Background fetch`
-  ![alt text][capabilities]
+
+![alt text][capabilities]
 
 - Open `Info.plist` and add:
 
@@ -42,7 +44,7 @@ Add following AppDelegate function to your `AppDelegate` or add the `Notificatio
 ```
 func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
     NotificationCenter.default.post(name: NSNotification.Name(BackgroundNotifications.FetchReceived.name()), object: completionHandler)
-  }
+}
 ```
 
 #### Ionic/Typescript
