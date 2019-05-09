@@ -24,7 +24,8 @@ Background Fetch was introduced in iOS version `7`, so be sure to target devices
 - Go to the `Application Settings` > `Capabilities`
   -- Activate `Background Modes`
   -- Tick `Background fetch`
-  <image>
+  ![alt text][capabilities]
+
 - Open `Info.plist` and add:
 
 ```
@@ -150,3 +151,5 @@ fetchCompleted(options: { result: FetchResult }): Promise<void>;
 **String representation**: BACKGROUNDFETCHRECEIVED
 **Data**: None
 **Triggered**: When a Background Fetch was initiated by the AppDelegate
+
+[capabilities]: https://github.com/kaunstdadenga/capacitor-background-fetch/blob/master/doc/img/capabilities.png "Xcode Capabilities Settings"
