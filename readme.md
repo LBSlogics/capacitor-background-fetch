@@ -115,7 +115,7 @@ setMinimumBackgroundFetchInterval(options: {
 
 **returns**: `Promise<void>`
 
-####disableBackgroundFetch
+### disableBackgroundFetch
 
 Disables background fetch if it is not used anymore. Same as calling `setMinimumBackgroundFetchInterval` with an interval of `never`.
 
