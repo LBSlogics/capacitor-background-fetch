@@ -6,5 +6,6 @@
 CAP_PLUGIN(BackgroundFetch, "BackgroundFetch",
            CAP_PLUGIN_METHOD(setMinimumBackgroundFetchInterval, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(disableBackgroundFetch, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(fetch, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(fetchCompleted, CAPPluginReturnPromise);
 )

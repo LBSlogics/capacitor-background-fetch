@@ -67,6 +67,49 @@ public class BackgroundFetch: CAPPlugin {
     call.success([:])
   }
   
+  @objc func fetch(_ call: CAPPluginCall) {
+    guard let address = call.getString("url") else {
+      print("BackgroundFetch: URL is needed to fetch")
+      call.error("BackgroundFetch: URL is needed to fetch")
+      return
+    }
+    
+    let headers = call.getObject("headers")
+  
+    
+    guard let url = URL(string: address) else {
+      print("BackgroundFetch: " + address + " is not a valid url")
+      call.error(address + " is not a valid url")
+      return
+    }
+    
+    var urlRequest = URLRequest(url: url)
+    if let headers = headers {
+      for (key, value) in headers {
+        if let value = value as? String {
+          print("BackgroundFetch: Founder Header " + key + ": " +  value)
+          urlRequest.addValue(key, forHTTPHeaderField: value)
+        }
+      }
+      
+    } else {
+      print("BackgroundFetch: Fetch from " + address + " without headers")
+    }
+      
+      
+    let semaphore = DispatchSemaphore(value: 0)
+    var result: String = ""
+    
+    let task = URLSession.shared.dataTask(with: urlRequest) {(data, response, error) in
+      result = String(data: data!, encoding: String.Encoding.utf8)!
+      semaphore.signal()
+    }
+    
+    task.resume()
+    semaphore.wait()
+    call.success(["response": result])
+  }
+  
   @objc func fetchCompleted(_ call: CAPPluginCall) {
     guard let completionHandler = self.completionHandler else {
       let message = "BackgroundFetch: No fetch command received from iOS"
