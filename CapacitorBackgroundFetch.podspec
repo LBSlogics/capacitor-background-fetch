@@ -1,7 +1,7 @@
 
   Pod::Spec.new do |s|
     s.name = 'CapacitorBackgroundFetch'
-    s.version = '0.0.1'
+    s.version = '0.0.7'
     s.summary = 'Utilizing the iOS background fetch mechanism to fetch new data while the app is in background'
     s.license = 'MIT'
     s.homepage = 'https://github.com/kaunstdadenga/capacitor-background-fetch.git'

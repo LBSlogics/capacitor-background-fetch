@@ -1,5 +1,15 @@
-# Dependency directories
-node_modules/
+# General
+.DS_Store
+.idea
+.gradle
+.settings
+*.tgz
+
+# iOS
 ios/Pods/
 ios/Plugin.xcworkspace/contents.xcworkspacedata
 ios/Plugin.xcworkspace/xcuserdata/
+
+# NPM
+node_modules
+dist
