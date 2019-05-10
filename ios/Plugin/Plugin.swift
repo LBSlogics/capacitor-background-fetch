@@ -68,6 +68,8 @@ public class BackgroundFetch: CAPPlugin {
   }
   
   @objc func fetch(_ call: CAPPluginCall) {
+    print("PluginCall:")
+    print(call)
     guard let address = call.getString("url") else {
       print("BackgroundFetch: URL is needed to fetch")
       call.error("BackgroundFetch: URL is needed to fetch")
