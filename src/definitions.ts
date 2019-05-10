@@ -20,7 +20,7 @@ export interface BackgroundFetchPlugin extends Plugin {
   disableBackgroundFetch(options: {}): Promise<void>;
   fetch(options: {
     address: string;
-    headers: { string: string };
+    headers: { [id: string]: string };
   }): Promise<string>;
   fetchCompleted(options: { result: FetchResult }): Promise<void>;
 }
