@@ -6,16 +6,16 @@ declare global {
   }
 }
 
-type FetchResult = "newData" | "noData" | "failed";
+export type FetchResult = "newData" | "noData" | "failed";
 
-type FetchInterval = "minimum" | "never";
+export type FetchInterval = "minimum" | "never";
 
 export const FetchReceived = "BACKGROUNDFETCHRECEIVED";
 
 export interface BackgroundFetchPlugin extends Plugin {
   setMinimumBackgroundFetchInterval(options: {
-    interval: FetchInterval;
-    seconds: number;
+    interval?: FetchInterval;
+    seconds?: number;
   }): Promise<void>;
   disableBackgroundFetch(options: {}): Promise<void>;
   fetch(options: {
