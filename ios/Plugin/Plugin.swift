@@ -68,16 +68,16 @@ public class BackgroundFetch: CAPPlugin {
   }
   
   @objc func fetch(_ call: CAPPluginCall) {
-    print("PluginCall:")
-    print(call)
-    guard let address = call.getString("url") else {
+    print("CAPPluginCall")
+    print(call.options)
+    guard let address = call.getString("address") else {
       print("BackgroundFetch: URL is needed to fetch")
       call.error("BackgroundFetch: URL is needed to fetch")
       return
     }
     
     let headers = call.getObject("headers")
-  
+    
     
     guard let url = URL(string: address) else {
       print("BackgroundFetch: " + address + " is not a valid url")
@@ -97,19 +97,38 @@ public class BackgroundFetch: CAPPlugin {
     } else {
       print("BackgroundFetch: Fetch from " + address + " without headers")
     }
-      
-      
+    
+    
     let semaphore = DispatchSemaphore(value: 0)
     var result: String = ""
+    var error: Error? = nil
     
-    let task = URLSession.shared.dataTask(with: urlRequest) {(data, response, error) in
+    let sessionConfig = URLSessionConfiguration.default
+    sessionConfig.timeoutIntervalForRequest = 10.0
+    sessionConfig.timeoutIntervalForResource = 20.0
+    let session = URLSession(configuration: sessionConfig)
+    
+    let task = session.dataTask(with: urlRequest) {(data, response, httpError) in
+      if let err = httpError {
+        error = err
+        semaphore.signal()
+        return
+      }
+      
       result = String(data: data!, encoding: String.Encoding.utf8)!
       semaphore.signal()
     }
     
     task.resume()
     semaphore.wait()
-    call.success(["response": result])
+    
+    if let err = error {
+      print("BackgroundFetch: Error while executing http request: " + error.debugDescription)
+      call.reject("HTTP Error", err, [:])
+    } else {
+      print("BackgroundFetch: Successful http request: " + result)
+      call.success(["response": result])
+    }
   }
   
   @objc func fetchCompleted(_ call: CAPPluginCall) {
