@@ -75,17 +75,14 @@ public class BackgroundFetch: CAPPlugin {
       call.error("BackgroundFetch: URL is needed to fetch")
       return
     }
-    
-    let headers = call.getObject("headers")
-    
-    
     guard let url = URL(string: address) else {
       print("BackgroundFetch: " + address + " is not a valid url")
       call.error(address + " is not a valid url")
       return
     }
-    
     var urlRequest = URLRequest(url: url)
+    
+    let headers = call.getObject("headers")
     if let headers = headers {
       for (key, value) in headers {
         if let value = value as? String {
@@ -98,25 +95,45 @@ public class BackgroundFetch: CAPPlugin {
       print("BackgroundFetch: Fetch from " + address + " without headers")
     }
     
-    
     let semaphore = DispatchSemaphore(value: 0)
     var result: String = ""
     var error: Error? = nil
+    var task: URLSessionTask
+    let httpMethod = call.getString("httpMethod") ?? "GET"
     
     let sessionConfig = URLSessionConfiguration.default
     sessionConfig.timeoutIntervalForRequest = 10.0
     sessionConfig.timeoutIntervalForResource = 20.0
     let session = URLSession(configuration: sessionConfig)
     
-    let task = session.dataTask(with: urlRequest) {(data, response, httpError) in
-      if let err = httpError {
-        error = err
-        semaphore.signal()
-        return
+    if httpMethod == "POST" {
+      var jsonData: Data? = nil
+      
+      if let json = call.getObject("body") {
+        jsonData = try? JSONSerialization.data(withJSONObject: json, options: [])
       }
       
-      result = String(data: data!, encoding: String.Encoding.utf8)!
-      semaphore.signal()
+      task = session.uploadTask(with: urlRequest, from: jsonData) { (data, response, httpError) in
+        if let err = httpError {
+          error = err
+          semaphore.signal()
+          return
+        }
+        
+        result = String(data: data!, encoding: String.Encoding.utf8)!
+        semaphore.signal()
+      }
+    } else {
+      task = session.dataTask(with: urlRequest) {(data, response, httpError) in
+        if let err = httpError {
+          error = err
+          semaphore.signal()
+          return
+        }
+        
+        result = String(data: data!, encoding: String.Encoding.utf8)!
+        semaphore.signal()
+      }
     }
     
     task.resume()

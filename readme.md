@@ -141,13 +141,15 @@ disableBackgroundFetch(options: {}): Promise<void>;
 
 ### fetch
 
-Uses a NSUrlSession to make an HTTP Request as iOS limites the use of JavaScript during the Background Mode.
+Uses an UrlSession to make an HTTP Request as iOS limites the use of JavaScript during the Background Mode.
 
 ```
 fetch(options: {
     address: string;
     headers: { [id: string]: string };
-  }): Promise<string>;
+    httpMethod: HttpMethod;
+    body: { string: string};
+}): Promise<string>;
 ```
 
 **options**:
@@ -156,6 +158,10 @@ fetch(options: {
 - `headers: Dictionary`: Containing Request Headers which should be send
   - `key`: Key of the Header
   - `value`: Value of the Header
+- `httpMethod`:
+  - `GET`: Get Request
+  - `POST`: Post Request
+- `body`: JSON Dictionary for Post Requests
 
 **returns**:
 
