@@ -67,11 +67,24 @@ BackgroundFetch.setMinimumBackgroundFetchInterval({
 });
 ```
 
+##### Fetch with Background Fetch
+
+```
+let headers: { [id: string]: string } = {};
+headers['content-type'] = 'application/json';
+
+BackgroundFetch.fetch({
+    address: "https://jsonplaceholder.typicode.com/todos/1",
+    headers: headers
+});
+```
+
 ##### Listen for Background Fetch Events
 
 ```
 BackgroundFetch.addListener(FetchReceived, () => {
     // Do something in the Background
+    // Preferable with 'BackgroundFetch.fetch()' as JS is limited in the Background Mode by iOS
 
     // Call the completionHandler on iOS
     BackgroundFetch.fetchCompleted({
@@ -125,6 +138,28 @@ disableBackgroundFetch(options: {}): Promise<void>;
 
 **options**: none
 **returns**: `Promise<void>`
+
+### fetch
+
+Uses a NSUrlSession to make an HTTP Request as iOS limites the use of JavaScript during the Background Mode.
+
+```
+fetch(options: {
+    address: string;
+    headers: { [id: string]: string };
+  }): Promise<string>;
+```
+
+**options**:
+
+- `address: string`: The target address of the HTTP Request
+- `headers: Dictionary`: Containing Request Headers which should be send
+  - `key`: Key of the Header
+  - `value`: Value of the Header
+
+**returns**:
+
+- `Promise<string>`: The response string of the HTTP Request
 
 ### fetchCompleted
 
