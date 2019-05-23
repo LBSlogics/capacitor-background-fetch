@@ -30,7 +30,7 @@ export interface BackgroundFetchPlugin extends Plugin {
     headers: { [id: string]: string };
     httpMethod?: HttpMethod;
     body?: {
-      string: string;
+      [id: string]: string;
     };
   }): Promise<HttpResponse>;
   fetchCompleted(options: { result: FetchResult }): Promise<void>;

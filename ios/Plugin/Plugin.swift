@@ -112,11 +112,7 @@ public class BackgroundFetch: CAPPlugin {
       var jsonData: Data? = nil
       
       if let json = call.getObject("body") {
-        print("BackgroundFetch: Body found try parsing");
         jsonData = try? JSONSerialization.data(withJSONObject: json, options: [])
-        print("BackgroundFetch: Body parsing completed" + (jsonData != nil ? jsonData!.debugDescription : "nil"));
-      } else {
-        print("BackgroundFetch: No Body found");
       }
       
       task = session.uploadTask(with: urlRequest, from: jsonData) { (data, response, httpError) in
@@ -156,11 +152,15 @@ public class BackgroundFetch: CAPPlugin {
     
     if let err = error {
       print("BackgroundFetch: Error while executing http request: " + error.debugDescription)
-      call.reject("HTTP Error", err, [:])
+      call.reject("Internal Error", err, [:])
     } else {
-      print("BackgroundFetch: Successful http request:  \(responseCode)")
-      print("BackgroundFetch: Response: " + result)
-      call.success(["response": result, "code": responseCode])
+      if (responseCode > 500) {
+        call.reject("Server Error \(responseCode)", nil, [:])
+      } else if (responseCode > 400) {
+        call.reject("Client Error \(responseCode)", nil, [:])
+      } else {
+        call.success(["response": result, "code": responseCode])
+      }
     }
   }
   
