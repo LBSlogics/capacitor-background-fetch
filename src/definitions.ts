@@ -12,6 +12,11 @@ export type FetchInterval = "minimum" | "never";
 
 export type HttpMethod = "GET" | "POST";
 
+export type HttpResponse = {
+  code: number;
+  response: string;
+};
+
 export const FetchReceived = "BACKGROUNDFETCHRECEIVED";
 
 export interface BackgroundFetchPlugin extends Plugin {
@@ -25,6 +30,6 @@ export interface BackgroundFetchPlugin extends Plugin {
     headers: { [id: string]: string };
     httpMethod?: HttpMethod;
     body?: string;
-  }): Promise<string>;
+  }): Promise<HttpResponse>;
   fetchCompleted(options: { result: FetchResult }): Promise<void>;
 }

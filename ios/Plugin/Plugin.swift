@@ -97,6 +97,7 @@ public class BackgroundFetch: CAPPlugin {
     
     let semaphore = DispatchSemaphore(value: 0)
     var result: String = ""
+    var responseCode: Int = -1
     var error: Error? = nil
     var task: URLSessionTask
     let httpMethod = call.getString("httpMethod") ?? "GET"
@@ -120,6 +121,9 @@ public class BackgroundFetch: CAPPlugin {
           return
         }
         
+        if let httpResponse = response as? HTTPURLResponse {
+          responseCode = httpResponse.statusCode
+        }
         result = String(data: data!, encoding: String.Encoding.utf8)!
         semaphore.signal()
       }
@@ -131,6 +135,9 @@ public class BackgroundFetch: CAPPlugin {
           return
         }
         
+        if let httpResponse = response as? HTTPURLResponse {
+          responseCode = httpResponse.statusCode
+        }
         result = String(data: data!, encoding: String.Encoding.utf8)!
         semaphore.signal()
       }
@@ -143,8 +150,9 @@ public class BackgroundFetch: CAPPlugin {
       print("BackgroundFetch: Error while executing http request: " + error.debugDescription)
       call.reject("HTTP Error", err, [:])
     } else {
-      print("BackgroundFetch: Successful http request: " + result)
-      call.success(["response": result])
+      print("BackgroundFetch: Successful http request:  \(responseCode)")
+      print("BackgroundFetch: Response: " + result)
+      call.success(["response": result, "code": responseCode])
     }
   }
   
