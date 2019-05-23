@@ -108,13 +108,19 @@ public class BackgroundFetch: CAPPlugin {
     let session = URLSession(configuration: sessionConfig)
     
     if httpMethod == "POST" {
+      print("BackgroundFetch: Executing POST Request")
       var jsonData: Data? = nil
       
       if let json = call.getObject("body") {
+        print("BackgroundFetch: Body found try parsing");
         jsonData = try? JSONSerialization.data(withJSONObject: json, options: [])
+        print("BackgroundFetch: Body parsing completed" + (jsonData != nil ? jsonData!.debugDescription : "nil"));
+      } else {
+        print("BackgroundFetch: No Body found");
       }
       
       task = session.uploadTask(with: urlRequest, from: jsonData) { (data, response, httpError) in
+        print("BackgroundFetch: Executed POST Request")
         if let err = httpError {
           error = err
           semaphore.signal()
@@ -128,7 +134,9 @@ public class BackgroundFetch: CAPPlugin {
         semaphore.signal()
       }
     } else {
+      print("BackgroundFetch: Executing GET Request")
       task = session.dataTask(with: urlRequest) {(data, response, httpError) in
+        print("BackgroundFetch: Executed GET Request")
         if let err = httpError {
           error = err
           semaphore.signal()
