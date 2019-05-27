@@ -1,17 +1,6 @@
 import Foundation
 import Capacitor
 
-struct BackgroundFetchError: LocalizedError {
-  
-  var localizedDescription: String
-  var errorDescription: String
-  
-  init(description: String, code: Int) {
-    self.localizedDescription = description
-    self.errorDescription = "\(code)"
-  }
-}
-
 /**
  * Notificaton types for NSNotificationCenter
  */
@@ -98,12 +87,9 @@ public class BackgroundFetch: CAPPlugin {
       for (key, value) in headers {
         if let value = value as? String {
           print("BackgroundFetch: Founder Header " + key + ": " +  value)
-          urlRequest.addValue(key, forHTTPHeaderField: value)
+          urlRequest.addValue(value, forHTTPHeaderField: key)
         }
       }
-      
-    } else {
-      print("BackgroundFetch: Fetch from " + address + " without headers")
     }
     
     let semaphore = DispatchSemaphore(value: 0)
@@ -163,12 +149,12 @@ public class BackgroundFetch: CAPPlugin {
     
     if let err = error {
       print("BackgroundFetch: Error while executing http request: " + error.debugDescription)
-      call.reject("Internal Error", err, [:])
+      call.reject("Internal Error - \(result)", err, [:])
     } else {
       if (responseCode > 500) {
-        call.reject("Server Error \(responseCode)", BackgroundFetchError(description: result, code: responseCode), [:])
+        call.reject("Server Error \(responseCode): \(result)", nil, [:])
       } else if (responseCode > 400) {
-        call.reject("Client Error \(responseCode)", BackgroundFetchError(description: result, code: responseCode), [:])
+        call.reject("Client Error \(responseCode): \(result)", nil, [:])
       } else {
         call.success(["response": result, "code": responseCode])
       }
