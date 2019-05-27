@@ -81,6 +81,7 @@ public class BackgroundFetch: CAPPlugin {
       return
     }
     var urlRequest = URLRequest(url: url)
+    urlRequest.httpMethod = call.getString("httpMethod") ?? "GET"
     
     let headers = call.getObject("headers")
     if let headers = headers {
@@ -96,52 +97,49 @@ public class BackgroundFetch: CAPPlugin {
     var result: String = ""
     var responseCode: Int = -1
     var error: Error? = nil
-    var task: URLSessionTask
-    let httpMethod = call.getString("httpMethod") ?? "GET"
+    
     
     let sessionConfig = URLSessionConfiguration.default
     sessionConfig.timeoutIntervalForRequest = 10.0
     sessionConfig.timeoutIntervalForResource = 20.0
     let session = URLSession(configuration: sessionConfig)
     
-    if httpMethod == "POST" {
-      print("BackgroundFetch: Executing POST Request")
+    if urlRequest.httpMethod == "POST" {
+      print("BackgroundFetch: Parsing Json for POST Request")
       var jsonData: Data? = nil
       
-      if let json = call.getObject("body") {
-        jsonData = try? JSONSerialization.data(withJSONObject: json, options: [])
+      if let jsonString = call.getString("body") {
+        let data = jsonString.data(using: .utf8)!
+        
+        do {
+          let json = try JSONSerialization.jsonObject(with: data, options: [])
+          
+          jsonData = try JSONSerialization.data(withJSONObject: json, options: [])
+          print("BackgroundFetch: JsonData \(jsonData!)")
+        } catch {
+          print(error.localizedDescription)
+        }
+      } else {
+        print("BackgroundFetch: No body parameter found")
       }
       
-      task = session.uploadTask(with: urlRequest, from: jsonData) { (data, response, httpError) in
-        print("BackgroundFetch: Executed POST Request")
-        if let err = httpError {
-          error = err
-          semaphore.signal()
-          return
-        }
-        
-        if let httpResponse = response as? HTTPURLResponse {
-          responseCode = httpResponse.statusCode
-        }
-        result = String(data: data!, encoding: String.Encoding.utf8)!
+      urlRequest.httpBody = jsonData
+    }
+    
+    print("BackgroundFetch: Executing \(urlRequest.httpMethod ?? "Unknown") Request")
+    let task = session.dataTask(with: urlRequest) { data, response, httpError in
+      print("BackgroundFetch: Executed \(urlRequest.httpMethod ?? "Unknown") Request")
+      if let err = httpError {
+        error = err
         semaphore.signal()
+        return
       }
-    } else {
-      print("BackgroundFetch: Executing GET Request")
-      task = session.dataTask(with: urlRequest) {(data, response, httpError) in
-        print("BackgroundFetch: Executed GET Request")
-        if let err = httpError {
-          error = err
-          semaphore.signal()
-          return
-        }
-        
-        if let httpResponse = response as? HTTPURLResponse {
-          responseCode = httpResponse.statusCode
-        }
-        result = String(data: data!, encoding: String.Encoding.utf8)!
-        semaphore.signal()
+      
+      if let httpResponse = response as? HTTPURLResponse {
+        responseCode = httpResponse.statusCode
       }
+      result = String(data: data!, encoding: String.Encoding.utf8)!
+      semaphore.signal()
     }
     
     task.resume()
