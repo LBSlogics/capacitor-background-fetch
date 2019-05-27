@@ -1,6 +1,17 @@
 import Foundation
 import Capacitor
 
+struct BackgroundFetchError: LocalizedError {
+  
+  var localizedDescription: String
+  var errorDescription: String
+  
+  init(description: String, code: Int) {
+    self.localizedDescription = description
+    self.errorDescription = "\(code)"
+  }
+}
+
 /**
  * Notificaton types for NSNotificationCenter
  */
@@ -155,9 +166,9 @@ public class BackgroundFetch: CAPPlugin {
       call.reject("Internal Error", err, [:])
     } else {
       if (responseCode > 500) {
-        call.reject("Server Error \(responseCode)", nil, [:])
+        call.reject("Server Error \(responseCode)", BackgroundFetchError(description: result, code: responseCode), [:])
       } else if (responseCode > 400) {
-        call.reject("Client Error \(responseCode)", nil, [:])
+        call.reject("Client Error \(responseCode)", BackgroundFetchError(description: result, code: responseCode), [:])
       } else {
         call.success(["response": result, "code": responseCode])
       }
