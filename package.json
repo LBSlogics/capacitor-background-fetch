@@ -1,6 +1,6 @@
 {
   "name": "capacitor-background-fetch",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Utilizing the iOS background fetch mechanism to fetch new data while the app is in background",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -17,26 +17,23 @@
   },
   "devDependencies": {
     "typescript": "^3.2.4",
-    "@capacitor/ios": "1.0.0",
-    "@capacitor/android": "1.0.0"
+    "@capacitor/ios": "1.0.0"
   },
   "files": [
     "dist/",
     "ios/",
-    "android/",
     "CapacitorBackgroundFetch.podspec"
   ],
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "ios",
+    "background fetch"
   ],
   "capacitor": {
     "ios": {
       "src": "ios"
-    },
-    "android": {
-      "src": "android"
     }
   },
   "repository": {
