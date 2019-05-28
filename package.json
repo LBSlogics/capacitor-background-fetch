@@ -1,6 +1,6 @@
 {
   "name": "capacitor-background-fetch",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Utilizing the iOS background fetch mechanism to fetch new data while the app is in background",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -38,9 +38,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kaunstdadenga/capacitor-background-fetch.git"
+    "url": "https://github.com/lbslogics/capacitor-background-fetch.git"
   },
   "bugs": {
-    "url": "https://github.com/kaunstdadenga/capacitor-background-fetch.git/issues"
+    "url": "https://github.com/lbslogics/capacitor-background-fetch.git/issues"
   }
 }
