@@ -62,8 +62,15 @@ import { FetchReceived } from 'capacitor-background-fetch';
 
 ```
 BackgroundFetch.setMinimumBackgroundFetchInterval({
-    interval: 'minimum',
-    seconds: 0
+    interval: 'minimum'
+});
+```
+
+Alternative (but not recommmended):
+
+```
+BackgroundFetch.setMinimumBackgroundFetchInterval({
+    seconds: 300
 });
 ```
 
@@ -73,9 +80,20 @@ BackgroundFetch.setMinimumBackgroundFetchInterval({
 let headers: { [id: string]: string } = {};
 headers['content-type'] = 'application/json';
 
+// Get
 BackgroundFetch.fetch({
     address: "https://jsonplaceholder.typicode.com/todos/1",
     headers: headers
+});
+
+// Post
+BackgroundFetch.fetch({
+    address: https://jsonplaceholder.typicode.com/todos/1,
+    headers: headers,
+    body: {
+        number: 1
+    },
+    httpMethod: 'POST'
 });
 ```
 
@@ -103,8 +121,7 @@ or
 
 ```
 BackgroundFetch.setMinimumBackgroundFetchInterval({
-    interval: 'never',
-    seconds: 0
+    interval: 'never'
 });
 ```
 
@@ -116,8 +133,8 @@ Sets the minimum background fetch interval but does not garantee that iOS will g
 
 ```
 setMinimumBackgroundFetchInterval(options: {
-    interval: FetchInterval;
-    seconds: number;
+    interval?: FetchInterval;
+    seconds?: number;
 }): Promise<void>;
 ```
 
@@ -147,8 +164,8 @@ Uses an UrlSession to make an HTTP Request as iOS limites the use of JavaScript 
 fetch(options: {
     address: string;
     headers: { [id: string]: string };
-    httpMethod: HttpMethod;
-    body: { string: string};
+    httpMethod?: HttpMethod;
+    body?: { string: string};
 }): Promise<string>;
 ```
 
@@ -158,7 +175,7 @@ fetch(options: {
 - `headers: Dictionary`: Containing Request Headers which should be send
   - `key`: Key of the Header
   - `value`: Value of the Header
-- `httpMethod`:
+- `httpMethod`: If not set GET will be assumed
   - `GET`: Get Request
   - `POST`: Post Request
 - `body`: JSON Dictionary for Post Requests
